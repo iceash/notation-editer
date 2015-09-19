@@ -15,6 +15,8 @@
     #inner1{display: block;}
     .inputarea{width: 579px;height: 250px;margin: 0 auto;display: block;resize: none;letter-spacing:2px;font-size: 15px;padding: 10px;}
     #yes{position: absolute;left: 10px;bottom: 10px;width: 80px;height: 30px;border: 1px solid #999;line-height: 30px;text-align: center;cursor: pointer;}
+    #labeldiao{position: absolute;left: 10px;bottom: 60px;}
+    /*#selectdiao{width: 50px;height: 30px;line-height: 30px;text-align: center;}*/
     </style>
 
 </head>
@@ -35,10 +37,82 @@
             <div id="inner3" class="inner">
                 <textarea id="inputarea3" class="inputarea" contentEditable=true></textarea>
             </div>
+            <label id="labeldiao">
+                选择调     第一首：
+                <select name="diao" class="selectdiao" id="selectdiao1">
+                    <option value="1" class="diao">C</option>
+                    <option value="2" class="diao">#C</option>
+                    <option value="3" class="diao">D</option>
+                    <option value="4" class="diao">#D</option>
+                    <option value="5" class="diao">E</option>
+                    <option value="6" class="diao">F</option>
+                    <option value="7" class="diao">#F</option>
+                    <option value="8" class="diao">G</option>
+                    <option value="9" class="diao">#G</option>
+                    <option value="10" class="diao">A</option>
+                    <option value="11" class="diao">#A</option>
+                    <option value="12" class="diao">B</option>
+                </select>   第二首：
+                <select name="diao" class="selectdiao" id="selectdiao2">
+                    <option value="1" class="diao">C</option>
+                    <option value="2" class="diao">#C</option>
+                    <option value="3" class="diao">D</option>
+                    <option value="4" class="diao">#D</option>
+                    <option value="5" class="diao">E</option>
+                    <option value="6" class="diao">F</option>
+                    <option value="7" class="diao">#F</option>
+                    <option value="8" class="diao">G</option>
+                    <option value="9" class="diao">#G</option>
+                    <option value="10" class="diao">A</option>
+                    <option value="11" class="diao">#A</option>
+                    <option value="12" class="diao">B</option>
+                </select>   第三首：
+                <select name="diao" class="selectdiao" id="selectdiao3">
+                    <option value="1" class="diao">C</option>
+                    <option value="2" class="diao">#C</option>
+                    <option value="3" class="diao">D</option>
+                    <option value="4" class="diao">#D</option>
+                    <option value="5" class="diao">E</option>
+                    <option value="6" class="diao">F</option>
+                    <option value="7" class="diao">#F</option>
+                    <option value="8" class="diao">G</option>
+                    <option value="9" class="diao">#G</option>
+                    <option value="10" class="diao">A</option>
+                    <option value="11" class="diao">#A</option>
+                    <option value="12" class="diao">B</option>
+                </select>
+            </label>
             <button id="yes" type="button">确定</button>
         </div>
     </form>
 <script type="text/javascript">
+function copyToClipboard(maintext){
+  if (window.clipboardData){
+    window.clipboardData.setData("Text", maintext);
+    }else if (window.netscape){
+      try{
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+    }catch(e){
+        alert("该浏览器不支持一键复制！n请手工复制文本框链接地址～");
+    }
+    var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+    if (!clip) return;
+    var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+    if (!trans) return;
+    trans.addDataFlavor('text/unicode');
+    var str = new Object();
+    var len = new Object();
+    var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+    var copytext=maintext;
+    str.data=copytext;
+    trans.setTransferData("text/unicode",str,copytext.length*2);
+    var clipid=Components.interfaces.nsIClipboard;
+    if (!clip) return false;
+    clip.setData(trans,null,clipid.kGlobalClipboard);
+  }
+  alert("以下内容已经复制到剪贴板nn" + maintext);
+}
+
     //使用方法 
     //$(文本域选择器).insertContent("插入的内容"); 
     //在光标位置插入内容, 并选中 
@@ -80,6 +154,16 @@
         } 
         }) 
     })(jQuery);
+    function isNum(s)
+    {
+        if(s!=null){
+            var r,re;
+            re = /\d*/i; //\d表示数字,*表示匹配多个数字
+            r = s.match(re);
+            return (r==s)?true:false;
+        }
+        return false;
+    }
 </script>
 
 <script type="text/javascript">
@@ -118,11 +202,82 @@
         for (var i = 0; i < 3; i++) {
             var j = 0, numarr = [];
             var chararr = content[i].split("");
+            reslut[i] = '';
             for (var k = 0; k < chararr.length; k++) {
                 //这里转化问题，很重要！！！！
+                if (isNum(chararr[k])) {
+                    numarr[j] = {};
+                    numarr[j]["num"] = parseInt(chararr[k]);
+                    numarr[j]["diao"] = 1;
+                    numarr[j]["length"] = 4;
+                    numarr[j]["gaodi"] = '';
+                    numarr[j]["changduan"] = '';
+                    j++;
+                }else{
+                    if (j == 0) {alert("格式错误");return false};
+                    switch(chararr[k]){
+                        case "'": 
+                        case ".": numarr[j-1]["gaodi"] += chararr[k];break;
+                        case "+":
+                        case "-":numarr[j-1]["changduan"] = chararr[k];break;
+                        case "|":break;
+                        default : alert("存在非法字符");return false;
+                    }
+                };
             };
-            console.log(chararr);
+            var diao = $("#selectdiao"+(i+1)).val();
+            diao = parseInt(diao);
+            for ( var j = 0; j < numarr.length; j++){
+                var re = 0;
+                switch(numarr[j]["num"]){
+                    case 0: re = 0;break;
+                    case 1: re = 1;break;
+                    case 2: re = 3;break;
+                    case 3: re = 5;break;
+                    case 4: re = 6;break;
+                    case 5: re = 8;break;
+                    case 6: re = 10;break;
+                    case 7: re = 12;break;
+                }
+                re = diao + re - 1;//改调
+                if (re > 12) {
+                    re += 4;
+                };
+                switch(numarr[j]["changduan"]){
+                    case '+':numarr[j]["length"] += 2; numarr[j+1]["length"] -= 2;break;
+                    case '-':numarr[j]["length"] -= 2;break;
+                }
+                var tmp = numarr[j]["gaodi"].split("");
+                for (var k = 0; k < tmp.length; k++){
+                    switch(tmp[k]){
+                        case "'":numarr[j]["diao"] += 1;break;
+                        case ".":numarr[j]["diao"] -= 1;break;
+                    }
+                }
+                var tmp = numarr[j]["diao"] * 16 + re;
+                tmpchar = String.fromCharCode(tmp);
+                for (var k = 0; k < numarr[j]["length"]; k++){
+                    reslut[i] += tmpchar;//parseInt(tmp,10).toString(16);
+                }
+            }
+            if (reslut[i].length > 128) {
+                alert("歌曲太长");return false;
+            };
+            while (reslut[i].length < 128){
+                reslut[i] += String.fromCharCode(0);
+            }
         };
+        var total = '';
+        for (var i = 0; i < 128; i++) {
+            total += String.fromCharCode(0);
+        };
+        total = total + reslut[0] + reslut[1] + reslut[2];
+        while (total.length < 65936){
+            total += String.fromCharCode(0);
+        }
+        // console.log(total);
+        // window.clipboardData.setData("text",total);
+        copyToClipboard(total);
     });
 </script>
 </body>
