@@ -6,7 +6,7 @@
     <script type="text/javascript" src="./jquery-1.11.2.min.js"></script>
 
     <style type="text/css">
-    #outter{width: 601px;height: 300px;background-color: #E0E0E0;position:relative;}        
+    #outter{width: 601px;height: 400px;position:absolute;margin: auto;left: 0;right: 0;top: 0;bottom: 0;}        
     #guide{width: 100%;height: 30px;clear: both;line-height: 30px;text-align: center;color: #8A8A8A;}
     .list{width: 199px;height: 100%;background-color: #EEE;display: inline-block;float: left;border: 1px solid #AAA;border-left: 0;cursor: pointer;}
     #list1{border-left: 1px solid #AAA;}
@@ -14,6 +14,7 @@
     .inner{width: 600px;height: 250px;position: absolute;left: 0px;top: 30px;display: none;}
     #inner1{display: block;}
     .inputarea{width: 579px;height: 250px;margin: 0 auto;display: block;resize: none;letter-spacing:2px;font-size: 15px;padding: 10px;}
+    #yes{position: absolute;left: 10px;bottom: 10px;width: 80px;height: 30px;border: 1px solid #999;line-height: 30px;text-align: center;cursor: pointer;}
     </style>
 
 </head>
@@ -34,6 +35,7 @@
             <div id="inner3" class="inner">
                 <textarea class="inputarea" contentEditable=true></textarea>
             </div>
+            <button id="yes" type="button">确定</button>
         </div>
     </form>
 <script type="text/javascript">
@@ -92,7 +94,9 @@
     $(".inputarea").keypress(function(event){
         var k = event.which; 
         k = String.fromCharCode(k);
-        // alert(k);
+        if (k == "|") {
+            $(this).insertContent("|");
+        };
         if (isNaN(k)) {
             switch(k){
                 case "w": $(this).insertContent("'");break;
