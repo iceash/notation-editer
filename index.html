@@ -4,8 +4,107 @@
     <meta charset="UTF-8">
     <title>简谱编辑器</title>
     <script type="text/javascript" src="./jquery-1.11.2.min.js"></script>
+
+    <style type="text/css">
+    #outter{width: 601px;height: 300px;background-color: #E0E0E0;position:relative;}        
+    #guide{width: 100%;height: 30px;clear: both;line-height: 30px;text-align: center;color: #8A8A8A;}
+    .list{width: 199px;height: 100%;background-color: #EEE;display: inline-block;float: left;border: 1px solid #AAA;border-left: 0;cursor: pointer;}
+    #list1{border-left: 1px solid #AAA;}
+    .select{background-color: #888;color: #fff;}
+    .inner{width: 600px;height: 250px;position: absolute;left: 0px;top: 30px;display: none;}
+    #inner1{display: block;}
+    .inputarea{width: 579px;height: 250px;margin: 0 auto;display: block;resize: none;letter-spacing:2px;font-size: 15px;padding: 10px;}
+    </style>
+
 </head>
 <body>
-    
+    <form action="#" id="from1">
+        <div id="outter">
+            <div id="guide">
+                <div class="list select" id="list1" num="1">第一首</div>
+                <div class="list" id="list2" num="2">第二首</div>
+                <div class="list" id="list3" num="3">第三首</div>
+            </div>
+            <div id="inner1" class="inner">
+                <textarea class="inputarea" contentEditable=true></textarea>
+            </div>
+            <div id="inner2" class="inner">
+                <textarea class="inputarea" contentEditable=true></textarea>
+            </div>
+            <div id="inner3" class="inner">
+                <textarea class="inputarea" contentEditable=true></textarea>
+            </div>
+        </div>
+    </form>
+<script type="text/javascript">
+    //使用方法 
+    //$(文本域选择器).insertContent("插入的内容"); 
+    //在光标位置插入内容, 并选中 
+    (function($) { 
+    $.fn.extend({ 
+        insertContent: function(myValue, t) { 
+            var $t = $(this)[0]; 
+            if (document.selection) { //ie 
+                this.focus(); 
+                var sel = document.selection.createRange(); 
+                sel.text = myValue; 
+                this.focus(); 
+                sel.moveStart('character', -l); 
+                var wee = sel.text.length; 
+                if (arguments.length == 2) { 
+                var l = $t.value.length; 
+                sel.moveEnd("character", wee + t); 
+                t <= 0 ? sel.moveStart("character", wee - 2 * t - myValue.length) : sel.moveStart("character", wee - t - myValue.length); 
+                sel.select(); 
+                } 
+            } else if ($t.selectionStart || $t.selectionStart == '0') { 
+                var startPos = $t.selectionStart; 
+                var endPos = $t.selectionEnd; 
+                var scrollTop = $t.scrollTop; 
+                $t.value = $t.value.substring(0, startPos) + myValue + $t.value.substring(endPos, $t.value.length); 
+                this.focus(); 
+                $t.selectionStart = startPos + myValue.length; 
+                $t.selectionEnd = startPos + myValue.length; 
+                $t.scrollTop = scrollTop; 
+                if (arguments.length == 2) { 
+                $t.setSelectionRange(startPos - t, $t.selectionEnd + t); 
+                this.focus(); 
+                } 
+            } 
+            else { 
+            this.value += myValue; 
+            this.focus(); 
+            } 
+        } 
+        }) 
+    })(jQuery);
+</script>
+
+<script type="text/javascript">
+    $(".list").click(function(){
+        var num = $(this).attr("num");
+        $(".inner").hide();
+        $(".list").removeClass("select");
+        $("#inner" + num).show();
+        $("#list" + num).addClass("select");
+    });
+
+    $(".inputarea").keypress(function(event){
+        var k = event.which; 
+        k = String.fromCharCode(k);
+        // alert(k);
+        if (isNaN(k)) {
+            switch(k){
+                case "w": $(this).insertContent("'");break;
+                case "s": $(this).insertContent(".");break;
+                case "d": $(this).insertContent("+");break;
+                case "a": $(this).insertContent("-");break;
+            }
+            return false;
+        };
+        $(this).insertContent(k); 
+        return false;
+    });
+</script>
 </body>
 </html>
