@@ -27,13 +27,13 @@
                 <div class="list" id="list3" num="3">第三首</div>
             </div>
             <div id="inner1" class="inner">
-                <textarea class="inputarea" contentEditable=true></textarea>
+                <textarea id="inputarea1" class="inputarea" contentEditable=true></textarea>
             </div>
             <div id="inner2" class="inner">
-                <textarea class="inputarea" contentEditable=true></textarea>
+                <textarea id="inputarea2" class="inputarea" contentEditable=true></textarea>
             </div>
             <div id="inner3" class="inner">
-                <textarea class="inputarea" contentEditable=true></textarea>
+                <textarea id="inputarea3" class="inputarea" contentEditable=true></textarea>
             </div>
             <button id="yes" type="button">确定</button>
         </div>
@@ -90,7 +90,7 @@
         $("#inner" + num).show();
         $("#list" + num).addClass("select");
     });
-
+    //文本框输入
     $(".inputarea").keypress(function(event){
         var k = event.which; 
         k = String.fromCharCode(k);
@@ -108,6 +108,21 @@
         };
         $(this).insertContent(k); 
         return false;
+    });
+    //点击确定
+    $("#yes").click(function(){
+        var content = [], reslut = [];
+        content[0] = $("#inputarea1").val();
+        content[1] = $("#inputarea2").val();
+        content[2] = $("#inputarea3").val();
+        for (var i = 0; i < 3; i++) {
+            var j = 0, numarr = [];
+            var chararr = content[i].split("");
+            for (var k = 0; k < chararr.length; k++) {
+                //这里转化问题，很重要！！！！
+            };
+            console.log(chararr);
+        };
     });
 </script>
 </body>
