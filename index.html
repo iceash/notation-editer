@@ -15,13 +15,13 @@
     #inner1{display: block;}
     .inputarea{width: 579px;height: 250px;margin: 0 auto;display: block;resize: none;letter-spacing:2px;font-size: 15px;padding: 10px;}
     #yes{position: absolute;left: 10px;bottom: 10px;width: 80px;height: 30px;border: 1px solid #999;line-height: 30px;text-align: center;cursor: pointer;}
+    #download{position: absolute;left: 100px;bottom: 10px;width: 80px;height: 30px;border: 1px solid #999;line-height: 30px;text-align: center;cursor: pointer;}
     #labeldiao{position: absolute;left: 10px;bottom: 60px;}
     /*#selectdiao{width: 50px;height: 30px;line-height: 30px;text-align: center;}*/
     </style>
 
 </head>
 <body>
-    <form action="#" id="from1">
         <div id="outter">
             <div id="guide">
                 <div class="list select" id="list1" num="1">第一首</div>
@@ -83,8 +83,11 @@
                 </select>
             </label>
             <button id="yes" type="button">确定</button>
+            <form action="./download.php" method="post" id="from1">
+                <input type="hidden" id="total" name="total">
+                <input type="submit" value="下载" id="download">
+            </form>
         </div>
-    </form>
 <script type="text/javascript">
 function copyToClipboard(maintext){
   if (window.clipboardData){
@@ -254,30 +257,31 @@ function copyToClipboard(maintext){
                         case ".":numarr[j]["diao"] -= 1;break;
                     }
                 }
-                var tmp = numarr[j]["diao"] * 16 + re;
+                var tmp = numarr[j]["diao"] * 16 + re + 30;
                 tmpchar = String.fromCharCode(tmp);
                 for (var k = 0; k < numarr[j]["length"]; k++){
                     reslut[i] += tmpchar;//parseInt(tmp,10).toString(16);
+                // console.log (reslut[i].length);
                 }
             }
-            if (reslut[i].length > 128) {
+            if (reslut[i].length > 256) {
                 alert("歌曲太长");return false;
             };
-            while (reslut[i].length < 128){
-                reslut[i] += String.fromCharCode(0);
+            while (reslut[i].length < 256){
+                reslut[i] += String.fromCharCode(30);
             }
+            // console.log(numarr);
         };
         var total = '';
-        for (var i = 0; i < 128; i++) {
-            total += String.fromCharCode(0);
+        for (var i = 0; i < 256; i++) {
+            total += String.fromCharCode(30);
         };
         total = total + reslut[0] + reslut[1] + reslut[2];
-        while (total.length < 65936){
-            total += String.fromCharCode(0);
+        while (total.length < 65536){
+            total += String.fromCharCode(30);
         }
-        // console.log(total);
-        // window.clipboardData.setData("text",total);
-        copyToClipboard(total);
+        $("#total").val(total);
+        alert("已成功编码，请点击下载");
     });
 </script>
 </body>
