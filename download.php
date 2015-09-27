@@ -1,7 +1,5 @@
 <?php 
 $total = $_POST["total"];
-
-
 Header( "Content-type: application/octet-stream "); 
 Header( "Accept-Ranges: bytes "); 
 header( "Content-Disposition: attachment; filename=test.hex "); 
@@ -13,6 +11,5 @@ $arr = str_split($total);
 for ($i=0; $i < count($arr); $i++) { 
     echo chr(ord($arr[$i])-30);
 }
-// $total = implode("", $arr);
-// echo($total);
+
 ?>
